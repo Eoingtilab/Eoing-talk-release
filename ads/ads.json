@@ -1,0 +1,23 @@
+{
+  "enabled": false,
+  "frequency": {
+    "maxPerLaunch": 1,
+    "maxPerDay": 1
+  },
+  "campaigns": [
+    {
+      "id": "example-direct-001",
+      "type": "direct",
+      "enabled": false,
+      "weight": 10,
+      "title": "EoingTalk Notice",
+      "description": "Free edition ad slot. Replace this campaign when affiliate or direct ad links are ready.",
+      "imageUrl": "",
+      "clickUrl": "https://github.com/Eoingtilab/Eoing-talk-release",
+      "buttonText": "Open",
+      "disclosure": "Advertisement",
+      "startAt": "2026-06-20",
+      "endAt": "2026-12-31"
+    }
+  ]
+}

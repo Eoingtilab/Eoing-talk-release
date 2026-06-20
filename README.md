@@ -1,2 +1,7 @@
-# Eoing-talk-release
-Public release and update assets for EoingTalk. Source code is kept in a private repository.
+# EoingTalk Releases
+
+This public repository hosts EoingTalk release downloads and update manifests only.
+
+The application source code is maintained separately in a private repository.
+
+Users should download the latest ZIP from the Releases page.

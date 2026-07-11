@@ -1,0 +1,13 @@
+{
+  "slug": "meal-wiki-platform",
+  "version": "2.4.2",
+  "url": "https://meal.wiki",
+  "package": "https://raw.githubusercontent.com/Eoingtilab/Eoing-talk-release/meal-wiki-platform/package-2.4.2.json",
+  "sha256": "de7ea03b43c965558dc765e1f53b471cab40d1feb688b239abd69f1a9bbca8d4",
+  "requires": "6.4",
+  "requires_php": "7.4",
+  "tested": "6.8",
+  "last_updated": "2026-07-12 00:00:00",
+  "description": "Meal.wiki의 음식·레시피·재료·맛집·지역·검색·다국어·품질관리·검수형 반위키 기능을 통합 관리합니다.",
+  "changelog": "<h4>2.4.2</h4><ul><li>WordPress 관리자 원클릭 업데이트 채널을 추가했습니다.</li><li>배포 패키지와 각 조각을 SHA-256으로 검증합니다.</li><li>허용된 GitHub 공개 배포 경로에서만 업데이트를 내려받습니다.</li><li>자동 업데이트는 기본적으로 비활성화됩니다.</li></ul>"
+}

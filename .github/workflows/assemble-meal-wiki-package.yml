@@ -10,6 +10,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: meal-wiki-platform-2.4.3-release
+  cancel-in-progress: false
+
 jobs:
   assemble:
     if: github.actor != 'github-actions[bot]'
@@ -26,18 +30,47 @@ jobs:
         run: |
           set -euo pipefail
           test -f build/2.4.3/READY
-          test -n "$(find build/2.4.3 -maxdepth 1 -type f -name 'chunk-*' -print -quit)"
-          cat $(find build/2.4.3 -maxdepth 1 -type f -name 'chunk-*' | sort) > meal-wiki-platform-2.4.3.zip.b64
+          test -n "$(find build/2.4.3 -maxdepth 1 -type f -name 'part-*' -print -quit)"
+          cat $(find build/2.4.3 -maxdepth 1 -type f -name 'part-*' | sort) > meal-wiki-platform-2.4.3.zip.b64
           tr -d '\r\n' < meal-wiki-platform-2.4.3.zip.b64 | base64 --decode > /tmp/meal-wiki-platform-2.4.3.zip
           echo "19dcd7f00a112b27e2faa3a19aad887c6962e35782caa6237e108cff06c32256  /tmp/meal-wiki-platform-2.4.3.zip" | sha256sum --check --strict
           unzip -t /tmp/meal-wiki-platform-2.4.3.zip
 
-      - name: Commit immutable payload
+      - name: Publish descriptor and manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > package-2.4.3.json <<'JSON'
+          {
+            "format": "meal-wiki-base64-package-v1",
+            "version": "2.4.3",
+            "sha256": "19dcd7f00a112b27e2faa3a19aad887c6962e35782caa6237e108cff06c32256",
+            "data_url": "https://raw.githubusercontent.com/Eoingtilab/Eoing-talk-release/meal-wiki-platform/meal-wiki-platform-2.4.3.zip.b64"
+          }
+          JSON
+          cat > update.json <<'JSON'
+          {
+            "slug": "meal-wiki-platform",
+            "version": "2.4.3",
+            "url": "https://meal.wiki",
+            "package": "https://raw.githubusercontent.com/Eoingtilab/Eoing-talk-release/meal-wiki-platform/package-2.4.3.json",
+            "sha256": "19dcd7f00a112b27e2faa3a19aad887c6962e35782caa6237e108cff06c32256",
+            "requires": "6.4",
+            "requires_php": "7.4",
+            "tested": "6.8",
+            "last_updated": "2026-07-12 04:56:00",
+            "description": "Meal.wiki의 음식·레시피·재료·맛집·지역·검색·다국어·품질관리·검수형 반위키 기능을 통합 관리합니다.",
+            "changelog": "<h4>2.4.3</h4><ul><li>통합 탐색 큐레이션 관리 화면을 추가했습니다.</li><li>섹션 노출 순서와 카드 수를 관리자가 설정할 수 있습니다.</li><li>대표 음식종류·건강관심·주제·지역 허브를 지정할 수 있습니다.</li><li>공개 콘텐츠가 없는 허브는 일반 방문자에게 숨기고 편집자에게 준비 상태로 표시합니다.</li><li>정확한 위치를 저장하지 않고 브라우저 언어만 사용해 국가 허브를 우선 정렬합니다.</li><li>지역 검색 인덱스에 국가 코드와 지역 유형 패싯을 추가했습니다.</li></ul>"
+          }
+          JSON
+
+      - name: Commit immutable release payload
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add meal-wiki-platform-2.4.3.zip.b64
-          git commit -m "Publish Meal.wiki Platform 2.4.3 payload [skip ci]"
+          rm -f build/2.4.3/part-* build/2.4.3/READY build/2.4.3/chunk-*
+          git add -A meal-wiki-platform-2.4.3.zip.b64 package-2.4.3.json update.json build/2.4.3
+          git commit -m "Publish Meal.wiki Platform 2.4.3 update [skip ci]"
           git push origin HEAD:meal-wiki-platform
